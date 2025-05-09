@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthGenie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .navbar {
+            background-color: #007BFF;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .title-section {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .title-section img {
+            max-width: 100px;
+            margin-bottom: 10px;
+        }
+        .title-section h1 {
+            font-size: 24px;
+            color: #333333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dddddd;
+        }
+        table th {
+            background-color: #007BFF;
+            color: white;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-section">
+        <img src="{{ url_for('static', filename='HealthAIImage.png') }}" alt="AI Logo">
+        <h1>HealthGenie: Health Insurance Data Powered by AI</h1>
+    </div>
+    <div class="navbar">
+        <a href="{{ url_for('plans') }}">Plans</a>
+        <a href="{{ url_for('codes') }}">Insurance Codes</a>
+        <a href="{{ url_for('services') }}">Services</a> <!-- Correctly linked to /services -->
+        <a href="#help">Help</a>
+    </div>
+    <div class="container">
+        <h1>API Data Results</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

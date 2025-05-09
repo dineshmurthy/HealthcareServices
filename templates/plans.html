@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plans - HealthGenie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .navbar {
+            background-color: #007BFF;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .title-section {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .title-section img {
+            max-width: 100px;
+            margin-bottom: 10px;
+        }
+        .title-section h1 {
+            font-size: 24px;
+            color: #333333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .dropdown {
+            margin: 20px 0;
+            text-align: center;
+        }
+        select, input[type="text"], button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #dddddd;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .submit-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+        pre {
+            background-color: #f4f4f9;
+            padding: 15px;
+            border: 1px solid #dddddd;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+            color: #333333;
+        }
+    </style>
+    <script>
+        function toggleInputFields() {
+            const dropdown = document.getElementById("options");
+            const zipCodeInput = document.getElementById("zipcode-input");
+            const planIdInput = document.getElementById("planid-input");
+            const planYearInput = document.getElementById("planyear-input");
+            const stateInput = document.getElementById("state-input");
+            const medicationInput = document.getElementById("medication-input");
+
+            // Hide all inputs by default
+            //zipCodeInput.classList.add("hidden");
+            planIdInput.classList.add("hidden");
+            planYearInput.classList.add("hidden");
+            stateInput.classList.add("hidden");
+            medicationInput.classList.add("hidden");
+
+            // Show the appropriate input based on the selected option
+            if (dropdown.value === "option1") {
+                zipCodeInput.classList.remove("hidden");
+            } else if (dropdown.value === "option2") {
+                zipCodeInput.classList.add("hidden");
+                planIdInput.classList.remove("hidden");
+                planYearInput.classList.remove("hidden");
+            } else if (dropdown.value === "option3" || dropdown.value === "option5") {
+                zipCodeInput.classList.add("hidden");
+                stateInput.classList.remove("hidden");
+            } else if (dropdown.value === "option4") {
+                zipCodeInput.classList.add("hidden");
+                medicationInput.classList.remove("hidden");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="title-section">
+        <img src="{{ url_for('static', filename='HealthAIImage.png') }}" alt="AI Logo">
+        <h1>HealthGenie: Health Insurance Data Powered by AI</h1>
+    </div>
+    <div class="navbar">
+        <a href="{{ url_for('plans') }}">Plans</a>
+        <a href="{{ url_for('codes') }}">Insurance Codes</a>
+        <a href="#services">Services</a>
+        <a href="#help">Help</a>
+    </div>
+    <div class="container">
+        <h1>Plans</h1>
+        <form action="/fetch_data" method="POST">
+            <div class="dropdown">
+                <label for="options">Options:</label>
+                <select id="options" name="option" onchange="toggleInputFields()">
+                    <option value="option1">Available Plans By ZipCode</option>
+                    <option value="option5">Available Plans By State</option>
+                    <option value="option2">Plan Details</option>
+                    <option value="option3">List Insurance Issuers By State</option>
+                    <option value="option4">Medication Benefits</option>
+                </select>
+            </div>
+            <div id="zipcode-input" class="hidden">
+                <label for="zipcode">ZipCode:</label>
+                <input type="text" id="zipcode" name="zipcode" placeholder="Enter ZipCode">
+            </div>
+            <div id="planid-input" class="hidden">
+                <label for="planid">PlanId:</label>
+                <input type="text" id="planid" name="planid" placeholder="Enter Plan Id">
+            </div>
+            <div id="planyear-input" class="hidden">
+                <label for="planyear">Plan Year:</label>
+                <input type="text" id="planyear" name="planyear" placeholder="Enter Plan Year">
+            </div>
+            <div id="state-input" class="hidden">
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state" placeholder="Enter State Abbreviation">
+            </div>
+            <div id="medication-input" class="hidden">
+                <label for="medicationname">Medication Name:</label>
+                <input type="text" id="medicationname" name="medicationname" placeholder="Enter Medication Name">
+            </div>
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+
+        {% if results %}
+        <h2>Results</h2>
+        <pre>{{ results | tojson(indent=4) }}</pre>
+        {% endif %}
+    </div>
+</body>
+</html>

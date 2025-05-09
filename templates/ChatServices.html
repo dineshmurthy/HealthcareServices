@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Services</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .navbar {
+            background-color: #007BFF;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Increase the height of the input box */
+        #chatInputBox {
+            height: 90px; /* Original height multiplied by 3 */
+        }
+
+        /* Increase the rows of the output box */
+        #outputBox {
+            rows: 12; /* Original rows multiplied by 3 */
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .title-section img {
+            display: block;
+            margin: 20px auto;
+            width: 200px; /* Original width */
+            height: auto;
+            transform: scale(2); /* Increase size by 2x */
+        }
+    </style>
+</head>
+<body>
+    <!-- Title Section with Image -->
+    <div class="title-section">
+        <img src="{{ url_for('static', filename='HealthAIImage.png') }}" alt="Health AI Logo">
+        <h1>Chat Services</h1>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="{{ url_for('plans') }}">Plans</a>
+        <a href="{{ url_for('codes') }}">Insurance Codes</a>
+        <a href="{{ url_for('services') }}">Services</a>
+        <a href="#help">Help</a>
+    </div>
+
+    <div class="container">
+        <section id="chatInputSection">
+            <h2>Chat Input</h2>
+            <div class="form-group">
+                <label for="chatInputBox">Chat Input:</label>
+                <input type="text" id="chatInputBox" placeholder="Enter your chat message">
+            </div>
+            <button id="submitChatButton">Submit Chat</button>
+        </section>
+
+        <section id="outputSection">
+            <h2>Output</h2>
+            <div class="form-group">
+                <label for="outputBox">Output:</label>
+                <textarea id="outputBox" rows="12" cols="50" readonly></textarea>
+            </div>
+        </section>
+
+        <!-- Add a button to return to the Home page -->
+        <button onclick="window.location.href='{{ url_for('index') }}'">Back to Home</button>
+    </div>
+
+    <script>
+        // Chatbot functionality
+        const submitChatButton = document.getElementById('submitChatButton');
+        const outputBox = document.getElementById('outputBox');
+
+        submitChatButton.addEventListener('click', async () => {
+            const chatInputBox = document.getElementById('chatInputBox').value;
+            if (chatInputBox.trim() === '') {
+                alert('Chat message cannot be empty');
+                return;
+            }
+
+            try {
+                // Call OpenAI API
+                const response = await fetch('/chatbot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: chatInputBox })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiMessage = data.message;
+
+                // Display AI message in output box
+                outputBox.value = aiMessage;
+            } catch (error) {
+                console.error('Error:', error);
+                outputBox.value = `Error: Unable to fetch response from AI. ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

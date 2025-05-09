@@ -1,0 +1,8 @@
+pandas
+langchain
+ollama
+scikit-learn
+numpy
+flask
+requests
+tabulate
