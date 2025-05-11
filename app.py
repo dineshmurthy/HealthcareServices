@@ -94,7 +94,7 @@ def chatbot():
         return jsonify({'error': 'No message provided'}), 400
 
     try:
-        openai.api_key = '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'
+        #openai.api_key = ''
         response = openai.ChatCompletion.create(
             #model="gpt-3.5-turbo",
             model="gpt-4-turbo",
